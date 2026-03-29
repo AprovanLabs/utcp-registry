@@ -1,0 +1,15 @@
+{
+    "scripts": {
+        "publish": "./scripts/publish.ts"
+    },
+    "tools": {
+        "googleapis": {
+            "version": "0.0.1+20260329v1"
+        },
+        "github": "0.0.1+20260329v1",
+        "slack": "0.0.1+20260329v1"
+    },
+    "exports": {
+        "publish": "./scripts/publish.ts"
+    }
+}

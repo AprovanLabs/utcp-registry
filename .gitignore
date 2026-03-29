@@ -133,7 +133,16 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+pnpm-lock.yaml
+.turbo/
 
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python

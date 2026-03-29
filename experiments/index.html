@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Code Flow Visualizer</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+          sans-serif;
+        background: #0d1117;
+        color: #c9d1d9;
+        min-height: 100vh;
+        padding: 2.5rem;
+        font-size: 14px;
+      }
+
+      header {
+        margin-bottom: 2rem;
+      }
+
+      h1 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #e6edf3;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.2rem;
+      }
+
+      .subtitle {
+        font-size: 0.78rem;
+        color: #8b949e;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 1.25fr;
+        gap: 1.5rem;
+        max-width: 980px;
+        align-items: start;
+      }
+
+      /* ── Shared panel chrome ─────────────────────────────── */
+      .panel {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .panel-header {
+        padding: 0.55rem 1rem;
+        border-bottom: 1px solid #30363d;
+        background: #0d1117;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #8b949e;
+      }
+
+      /* ── Source panel ────────────────────────────────────── */
+      #editor {
+        display: block;
+        width: 100%;
+        padding: 1.25rem 1rem;
+        font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", monospace;
+        font-size: 12.5px;
+        line-height: 1.8;
+        background: transparent;
+        color: #c9d1d9;
+        border: none;
+        outline: none;
+        resize: none;
+        min-height: 200px;
+        tab-size: 2;
+        caret-color: #58a6ff;
+        field-sizing: content;
+      }
+
+      #editor::selection {
+        background: #388bfd30;
+      }
+
+      pre#source {
+        padding: 1.25rem 1rem 1.25rem 0;
+        font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", monospace;
+        font-size: 12.5px;
+        line-height: 1.8;
+        overflow-x: auto;
+        counter-reset: ln;
+      }
+
+      pre#source .ln {
+        display: block;
+        padding-left: 3rem;
+        position: relative;
+        white-space: pre;
+      }
+
+      pre#source .ln::before {
+        content: counter(ln);
+        counter-increment: ln;
+        position: absolute;
+        left: 0;
+        width: 2.25rem;
+        text-align: right;
+        color: #3d444d;
+        font-size: 11px;
+        line-height: inherit;
+        user-select: none;
+        padding-right: 0.4rem;
+        border-right: 1px solid #21262d;
+      }
+
+      /* Syntax token colors */
+      .t-kw {
+        color: #ff7b72;
+      }
+      .t-aw {
+        color: #ff7b72;
+        font-style: italic;
+      }
+      .t-str {
+        color: #a5d6ff;
+      }
+      .t-id {
+        color: #ffa657;
+      }
+      .t-fn {
+        color: #d2a8ff;
+      }
+      .t-pkg {
+        color: #79c0ff;
+        font-weight: 600;
+      }
+
+      /* ── Flow panel ──────────────────────────────────────── */
+      .flow-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .section-head {
+        font-size: 0.63rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #8b949e;
+        margin-bottom: 0.55rem;
+      }
+
+      /* Imports block */
+      .imports-block {
+        margin-bottom: 1.5rem;
+      }
+
+      .imports-card {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 10px;
+        padding: 0.8rem 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+
+      .import-row {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+      }
+
+      .i-kw {
+        color: #ff7b72;
+      }
+      .i-mod {
+        color: #a5d6ff;
+      }
+      .i-from {
+        color: #8b949e;
+      }
+
+      .pkg-pill {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.72rem;
+        font-weight: 700;
+        font-family: monospace;
+        padding: 0.1rem 0.5rem;
+        border-radius: 4px;
+        color: #fff;
+        letter-spacing: 0.01em;
+      }
+
+      /* Steps */
+      .steps-block {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .step-row {
+        display: flex;
+        align-items: stretch;
+        gap: 0.75rem;
+        position: relative;
+      }
+
+      /* Vertical connector spine */
+      .spine {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+        gap: 0;
+        padding-top: 10px;
+      }
+
+      .step-circle {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        flex-shrink: 0;
+        background: #0d1117;
+      }
+
+      .spine-line {
+        width: 2px;
+        flex: 1;
+        min-height: 1rem;
+      }
+
+      .connector-segment {
+        display: flex;
+        align-items: stretch;
+        gap: 0.75rem;
+        position: relative;
+      }
+
+      .connector-spine {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 28px;
+        flex-shrink: 0;
+      }
+
+      .connector-body {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0 0.3rem 0.1rem;
+        font-size: 0.72rem;
+        color: #8b949e;
+        font-family: monospace;
+      }
+
+      .dep-var-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        font-family: monospace;
+        padding: 0.1rem 0.45rem;
+        border-radius: 4px;
+      }
+
+      /* Step card */
+      .step-card {
+        flex: 1;
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 10px;
+        border-left-width: 3px;
+        padding: 0.9rem 1.1rem;
+        margin-bottom: 0;
+      }
+
+      .step-top {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-bottom: 0.6rem;
+      }
+
+      .async-badge {
+        font-size: 0.58rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: #ff7b72;
+        border: 1px solid #ff7b7235;
+        padding: 0.08rem 0.35rem;
+        border-radius: 3px;
+        background: #ff7b7210;
+      }
+
+      .method-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.88rem;
+        color: #d2a8ff;
+        font-weight: 600;
+      }
+
+      .paren {
+        font-family: monospace;
+        color: #8b949e;
+        font-size: 0.85rem;
+      }
+
+      /* Args */
+      .step-args {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        padding-left: 0.05rem;
+      }
+
+      .arg-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.28rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 5px;
+        background: #21262d;
+        border: 1px solid #30363d;
+        color: #c9d1d9;
+      }
+
+      .arg-chip.is-ref {
+        border-color: var(--rc);
+        background: color-mix(in srgb, var(--rc) 10%, #21262d);
+        color: #e6edf3;
+      }
+
+      .arg-step-ref {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: var(--rc);
+        background: color-mix(in srgb, var(--rc) 18%, transparent);
+        padding: 0.05rem 0.3rem;
+        border-radius: 3px;
+      }
+
+      /* Produces */
+      .step-produces {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.65rem;
+        padding-top: 0.6rem;
+        border-top: 1px solid #21262d;
+      }
+
+      .produces-lbl {
+        font-size: 0.62rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: #8b949e;
+      }
+
+      .produces-arrow {
+        color: #8b949e;
+        font-size: 0.75rem;
+      }
+
+      .produces-chip {
+        font-family: monospace;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        color: #0d1117;
+      }
+
+      #flow-panel > .status {
+        font-size: 0.85rem;
+        color: #8b949e;
+        padding: 1rem;
+      }
+
+      /* ── Parallel group ──────────────────────────────────── */
+      .parallel-group {
+        flex: 1;
+        border: 1px solid #30363d;
+        border-radius: 10px;
+        border-left: 3px solid #f59e0b;
+        overflow: hidden;
+        background: #161b22;
+      }
+
+      .parallel-banner {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.4rem 0.85rem;
+        background: #0d1117;
+        border-bottom: 1px solid #30363d;
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #f59e0b;
+      }
+
+      .parallel-lanes {
+        display: grid;
+        grid-auto-flow: column;
+      }
+
+      .parallel-lane {
+        padding: 0.8rem 0.9rem;
+        border-right: 1px solid #21262d;
+      }
+
+      .parallel-lane:last-child {
+        border-right: none;
+      }
+
+      .lane-top {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-bottom: 0.5rem;
+      }
+
+      /* ── Inputs section ─────────────────────────────────── */
+      #inputs-section {
+        border-top: 1px solid #30363d;
+      }
+
+      .input-row {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid #21262d;
+      }
+
+      .input-row:last-child {
+        border-bottom: none;
+      }
+
+      .input-param-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+        color: #e879f9;
+        font-weight: 700;
+        min-width: 5rem;
+        flex-shrink: 0;
+      }
+
+      .input-field {
+        flex: 1;
+        background: #0d1117;
+        border: 1px solid #30363d;
+        border-radius: 5px;
+        color: #c9d1d9;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+        padding: 0.25rem 0.5rem;
+        outline: none;
+        transition: border-color 0.1s;
+      }
+
+      .input-field:focus {
+        border-color: #e879f9;
+      }
+      .input-field::placeholder {
+        color: #3d444d;
+      }
+
+      .arg-input-badge {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: #e879f9;
+        background: color-mix(in srgb, #e879f9 18%, transparent);
+        padding: 0.05rem 0.3rem;
+        border-radius: 3px;
+      }
+
+      /* ── Drill-in navigation + nested cues ─────────────── */
+      .flow-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-bottom: 0.9rem;
+        flex-wrap: wrap;
+      }
+
+      .crumb-btn,
+      .focus-btn,
+      .back-btn {
+        border: 1px solid #30363d;
+        background: #161b22;
+        color: #c9d1d9;
+        border-radius: 6px;
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.45rem;
+        cursor: pointer;
+      }
+
+      .back-btn {
+        border-color: #58a6ff55;
+        color: #79c0ff;
+      }
+
+      .crumb-btn.is-active {
+        border-color: #58a6ff66;
+        color: #79c0ff;
+        background: #58a6ff12;
+      }
+
+      .focus-btn {
+        border-color: #f59e0b55;
+        color: #fbbf24;
+        background: #f59e0b10;
+      }
+
+      .nested-controls {
+        margin-top: 0.7rem;
+        padding-top: 0.62rem;
+        border-top: 1px solid #21262d;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .branch-tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.08rem 0.38rem;
+        border-radius: 999px;
+        border: 1px solid #30363d;
+        font-size: 0.58rem;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: #8b949e;
+        font-weight: 700;
+      }
+
+      .branch-tag.then {
+        border-color: #10b98155;
+        color: #34d399;
+      }
+
+      .branch-tag.catch {
+        border-color: #ef444455;
+        color: #f87171;
+      }
+
+      .branch-tag.finally {
+        border-color: #f59e0b55;
+        color: #fbbf24;
+      }
+
+      .step-card.has-nested {
+        box-shadow: inset 0 0 0 1px #f59e0b30;
+      }
+
+      .step-card.origin-focus {
+        box-shadow: inset 0 0 0 1px #58a6ff66;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Code Flow Visualizer</h1>
+      <p class="subtitle">Tree-sitter parsed · execution order · data flow</p>
+    </header>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="panel-header">Source</div>
+        <textarea
+          id="editor"
+          spellcheck="false"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="off"
+        ></textarea>
+        <div id="inputs-section" style="display: none"></div>
+      </div>
+      <div id="flow-panel">
+        <p class="status">Parsing…</p>
+      </div>
+    </div>
+
+    <script type="module">
+      import {
+        Parser,
+        Language,
+      } from "https://cdn.jsdelivr.net/npm/web-tree-sitter/web-tree-sitter.js";
+
+      const SOURCE = `import github from 'github';
+import slack from 'slack';
+import { gmail } from 'googleapis';
+
+export default async function main({
+  name,
+  email
+}: {
+  name: string,
+  email: string
+}) {
+  const user = await github.getUser({ name });
+
+  await Promise.all([
+    slack.sendMessage(user.name, 'Hello from Tree-sitter!').then(() => console.log('hello')),
+    gmail.sendEmail(
+      'To: ' + email,
+      'Hello, ' + user.name
+    ).catch((error) => console.error(error))
+  ]);
+
+console.log('hello');
+}`;
+
+      // ── Helpers ──────────────────────────────────────────────────────────────
+
+      function childOfType(node, type) {
+        for (const c of node.children) if (c.type === type) return c;
+        return null;
+      }
+
+      function namedChildrenOf(node) {
+        return (
+          node?.namedChildren ??
+          [...(node?.children ?? [])].filter((c) => c.isNamed)
+        );
+      }
+
+      const FN_NODE_TYPES = new Set([
+        "function_declaration",
+        "function_expression",
+        "arrow_function",
+        "generator_function_declaration",
+        "generator_function",
+      ]);
+
+      const BRANCH_METHODS = new Set(["then", "catch", "finally"]);
+
+      function collectVariableDeclarators(node, out = []) {
+        for (const c of node.children ?? []) {
+          if (c.type === "variable_declarator") out.push(c);
+          collectVariableDeclarators(c, out);
+        }
+        return out;
+      }
+
+      // ── AST Analysis ─────────────────────────────────────────────────────────
+
+      function findFunctionNode(node) {
+        if (FN_NODE_TYPES.has(node.type)) return node;
+        for (const c of namedChildrenOf(node)) {
+          const f = findFunctionNode(c);
+          if (f) return f;
+        }
+        return null;
+      }
+
+      function extractFnParams(fnNode) {
+        const params = [];
+        const namedKids = namedChildrenOf(fnNode);
+        const fp =
+          fnNode.childForFieldName("parameters") ??
+          namedKids.find((c) => c.type === "formal_parameters") ??
+          childOfType(fnNode, "formal_parameters");
+        if (!fp) return params;
+        const fpKids = namedChildrenOf(fp);
+        for (const p of fpKids) {
+          if (p.type === "identifier") {
+            params.push({ name: p.text });
+          } else if (p.type === "object_pattern") {
+            const opKids = namedChildrenOf(p);
+            for (const prop of opKids) {
+              if (prop.type === "shorthand_property_identifier_pattern") {
+                params.push({ name: prop.text });
+              } else if (prop.type === "pair_pattern") {
+                const key = prop.childForFieldName("key")?.text;
+                if (key) params.push({ name: key });
+              }
+            }
+          }
+        }
+        return params;
+      }
+
+      function makeParserContext() {
+        let nextStepId = 1;
+        return {
+          makeStepId() {
+            const id = nextStepId;
+            nextStepId += 1;
+            return id;
+          },
+        };
+      }
+
+      function parseFunctionBodySteps(fnNode, ctx) {
+        const body =
+          fnNode.childForFieldName("body") ??
+          namedChildrenOf(fnNode).find(
+            (c) =>
+              c.type === "statement_block" || c.type.endsWith("expression"),
+          );
+        if (!body) return [];
+        if (body.type === "statement_block") {
+          return parseStatements(namedChildrenOf(body), ctx);
+        }
+        return parseExpressionToSteps(
+          body,
+          { produces: null, isAwait: false },
+          ctx,
+        );
+      }
+
+      function parseCallChain(callNode, opts, ctx) {
+        const chain = [];
+        let cursor = callNode;
+
+        while (cursor?.type === "call_expression") {
+          const fn = cursor.childForFieldName("function");
+          if (fn?.type !== "member_expression") break;
+          const objectExpr = fn.childForFieldName("object");
+          if (objectExpr?.type !== "call_expression") break;
+          chain.unshift({
+            method: fn.childForFieldName("property")?.text ?? "call",
+            callNode: cursor,
+          });
+          cursor = objectExpr;
+        }
+
+        const baseStep = parseCallNode(cursor ?? callNode, opts, ctx);
+
+        for (const link of chain) {
+          if (!BRANCH_METHODS.has(link.method)) continue;
+          const branchSteps = [];
+          const argv =
+            link.callNode.childForFieldName("arguments") ??
+            childOfType(link.callNode, "arguments");
+
+          for (const arg of namedChildrenOf(argv)) {
+            if (FN_NODE_TYPES.has(arg.type)) {
+              branchSteps.push(...parseFunctionBodySteps(arg, ctx));
+            }
+          }
+
+          if (branchSteps.length > 0) {
+            baseStep.nested.push({
+              label: link.method,
+              kind: "branch",
+              steps: branchSteps,
+            });
+          }
+        }
+
+        return baseStep;
+      }
+
+      function parseStatements(nodes, ctx) {
+        const steps = [];
+        for (const node of nodes) {
+          if (
+            node.type === "lexical_declaration" ||
+            node.type === "variable_declaration"
+          ) {
+            for (const decl of collectVariableDeclarators(node)) {
+              const nameNode = decl.childForFieldName("name");
+              const valueNode = decl.childForFieldName("value");
+              if (!valueNode) continue;
+              const produces = nameNode?.text ?? null;
+              const parsed = parseExpressionToSteps(
+                valueNode,
+                { produces, isAwait: false },
+                ctx,
+              );
+              steps.push(...parsed);
+            }
+            continue;
+          }
+
+          if (node.type === "expression_statement") {
+            const expr = namedChildrenOf(node)[0] ?? node.children?.[0];
+            const parsed = parseExpressionToSteps(
+              expr,
+              { produces: null, isAwait: false },
+              ctx,
+            );
+            steps.push(...parsed);
+            continue;
+          }
+
+          if (node.type === "return_statement") {
+            const expr =
+              node.childForFieldName("argument") ??
+              namedChildrenOf(node).find((c) => c.type.endsWith("expression"));
+            const parsed = parseExpressionToSteps(
+              expr,
+              { produces: null, isAwait: false },
+              ctx,
+            );
+            steps.push(...parsed);
+          }
+        }
+        return steps;
+      }
+
+      function parseExpressionToSteps(expr, opts, ctx) {
+        if (!expr) return [];
+
+        if (expr.type === "parenthesized_expression") {
+          return parseExpressionToSteps(namedChildrenOf(expr)[0], opts, ctx);
+        }
+
+        if (expr.type === "await_expression") {
+          const awaited =
+            expr.childForFieldName("expression") ?? namedChildrenOf(expr)[0];
+          return parseExpressionToSteps(
+            awaited,
+            { ...opts, isAwait: true },
+            ctx,
+          );
+        }
+
+        if (expr.type === "call_expression") {
+          return [parseCallChain(expr, opts, ctx)];
+        }
+
+        return [];
+      }
+
+      function isPromiseAllCall(callNode) {
+        const fn = callNode.childForFieldName("function");
+        if (fn?.type !== "member_expression") return false;
+        return (
+          fn.childForFieldName("object")?.text === "Promise" &&
+          fn.childForFieldName("property")?.text === "all"
+        );
+      }
+
+      function parseArgReference(node) {
+        if (!node) return null;
+        if (node.type === "member_expression") {
+          return node.childForFieldName("object")?.text ?? null;
+        }
+        if (node.type === "identifier") return node.text;
+        if (node.type === "binary_expression") {
+          for (const child of namedChildrenOf(node)) {
+            const ref = parseArgReference(child);
+            if (ref) return ref;
+          }
+        }
+        if (node.type === "object") {
+          for (const prop of namedChildrenOf(node)) {
+            if (prop.type === "shorthand_property_identifier") return prop.text;
+            if (prop.type === "pair") {
+              const val = prop.childForFieldName("value");
+              const ref = parseArgReference(val);
+              if (ref) return ref;
+            }
+          }
+        }
+        return null;
+      }
+
+      function parseCallNode(callNode, opts, ctx) {
+        const fn = callNode.childForFieldName("function");
+        const argv =
+          callNode.childForFieldName("arguments") ??
+          childOfType(callNode, "arguments");
+
+        let object = null;
+        let method = null;
+
+        if (fn?.type === "member_expression") {
+          const objectExpr = fn.childForFieldName("object");
+          object = objectExpr?.text ?? null;
+          method = fn.childForFieldName("property")?.text ?? null;
+        } else if (fn?.type === "identifier") {
+          method = fn.text;
+        }
+
+        const args = [];
+        for (const c of namedChildrenOf(argv)) {
+          args.push({
+            text: c.text,
+            refVar: parseArgReference(c),
+          });
+        }
+
+        const step = {
+          id: ctx.makeStepId(),
+          object,
+          method,
+          args,
+          produces: opts.produces,
+          isAwait: opts.isAwait,
+          nested: [],
+          parallel: false,
+          calls: [],
+        };
+
+        if (isPromiseAllCall(callNode)) {
+          const arrayNode = namedChildrenOf(argv).find(
+            (c) => c.type === "array",
+          );
+          step.parallel = true;
+          step.object = "Promise";
+          step.method = "all";
+          step.calls = [];
+          for (const elem of namedChildrenOf(arrayNode)) {
+            const parsed = parseExpressionToSteps(
+              elem,
+              { produces: null, isAwait: false },
+              ctx,
+            );
+            step.calls.push(...parsed);
+          }
+        }
+
+        return step;
+      }
+
+      function buildGlobalProducedMap(steps, params) {
+        const produced = new Map();
+        for (const p of params) produced.set(p.name, -1);
+
+        let ordinal = 0;
+        function visit(list) {
+          for (const s of list) {
+            if (s.produces && !produced.has(s.produces)) {
+              produced.set(s.produces, ordinal);
+            }
+            ordinal += 1;
+            if (s.parallel && s.calls.length > 0) visit(s.calls);
+            for (const block of s.nested) visit(block.steps);
+          }
+        }
+
+        visit(steps);
+        return produced;
+      }
+
+      function buildLocalProducedMap(steps, params) {
+        const produced = new Map();
+        for (const p of params) produced.set(p.name, -1);
+        for (let i = 0; i < steps.length; i += 1) {
+          if (steps[i].produces) produced.set(steps[i].produces, i);
+        }
+        return produced;
+      }
+
+      function analyzeAST(root) {
+        const imports = [];
+        const parserCtx = makeParserContext();
+        let params = [];
+        let fnName = null;
+        const stmtNodes = [];
+
+        for (const node of root.children) {
+          if (node.type === "import_statement") {
+            const info = parseImport(node);
+            if (info) imports.push(info);
+          } else {
+            stmtNodes.push(node);
+          }
+        }
+
+        let bodyNodes = stmtNodes;
+        if (stmtNodes.length > 0) {
+          const first = stmtNodes[0];
+          const isExport =
+            first.type === "export_statement" ||
+            first.type === "export_declaration";
+
+          if (isExport) {
+            const fn = findFunctionNode(first);
+            if (fn) {
+              fnName = fn.childForFieldName("name")?.text ?? null;
+              params = extractFnParams(fn);
+
+              const body =
+                fn.childForFieldName("body") ??
+                namedChildrenOf(fn).find((c) => c.type === "statement_block") ??
+                childOfType(fn, "statement_block");
+
+              if (body) {
+                bodyNodes = namedChildrenOf(body);
+              }
+            }
+          }
+        }
+
+        const steps = parseStatements(bodyNodes, parserCtx);
+        const produced = buildGlobalProducedMap(steps, params);
+
+        return { imports, steps, produced, params, fnName };
+      }
+
+      function parseImport(node) {
+        let name = null;
+        const clause = childOfType(node, "import_clause");
+        if (clause) {
+          name =
+            childOfType(clause, "identifier")?.text?.trim() ??
+            childOfType(clause, "import_default_specifier")?.text?.trim() ??
+            null;
+          // Named import: import { foo } from '...'
+          if (!name) {
+            const namedImports = childOfType(clause, "named_imports");
+            if (namedImports) {
+              for (const spec of namedImports.children) {
+                if (spec.type === "import_specifier") {
+                  name =
+                    spec.childForFieldName("name")?.text?.trim() ??
+                    childOfType(spec, "identifier")?.text?.trim() ??
+                    null;
+                  if (name) break;
+                }
+              }
+            }
+          }
+        }
+        if (!name)
+          name =
+            childOfType(node, "import_default_specifier")?.text?.trim() ?? null;
+        const src =
+          node.childForFieldName?.("source") ?? childOfType(node, "string");
+        const module = src?.text?.replace(/['"]/g, "").trim() ?? null;
+        return name && module ? { name, module } : null;
+      }
+
+      // ── Color assignment ─────────────────────────────────────────────────────
+
+      const PKG_COLORS = [
+        "#6366f1",
+        "#10b981",
+        "#f59e0b",
+        "#8b5cf6",
+        "#06b6d4",
+        "#ef4444",
+      ];
+      const VAR_COLORS = ["#ffa657", "#7ee787", "#79c0ff", "#ff9d00"];
+      const INPUT_COLOR = "#e879f9";
+      const pkgMap = new Map(),
+        varMap = new Map();
+      let pi = 0,
+        vi = 0;
+      const pkgColor = (k) => {
+        if (!pkgMap.has(k)) pkgMap.set(k, PKG_COLORS[pi++ % PKG_COLORS.length]);
+        return pkgMap.get(k);
+      };
+      const varColor = (k) => {
+        if (!varMap.has(k)) varMap.set(k, VAR_COLORS[vi++ % VAR_COLORS.length]);
+        return varMap.get(k);
+      };
+
+      // ── Source syntax highlighter ─────────────────────────────────────────────
+
+      function highlight(code) {
+        return code
+          .split("\n")
+          .map((raw) => {
+            let s = raw
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+            // Keywords first (before strings so string contents aren't matched)
+            s = s.replace(
+              /\b(import|export|from|const|let|var|async|function|return|default)\b/g,
+              '<span class="t-kw">$1</span>',
+            );
+            s = s.replace(/\b(await)\b/g, '<span class="t-aw">$1</span>');
+            // Strings
+            s = s.replace(
+              /'[^']*'|"[^"]*"/g,
+              (m) => `<span class="t-str">${m}</span>`,
+            );
+            return `<span class="ln">${s}</span>`;
+          })
+          .join("\n");
+      }
+
+      // ── DOM rendering ─────────────────────────────────────────────────────────
+
+      function formatStepLabel(step) {
+        const obj = step.object ?? "?";
+        const method = step.method ?? "call";
+        if (obj === "?" || obj == null) return `${method}( )`;
+        return `${obj}.${method}( )`;
+      }
+
+      function getNestedBlocks(step) {
+        return (step.nested ?? []).filter((b) => (b.steps?.length ?? 0) > 0);
+      }
+
+      function render(
+        { imports, steps, produced, params, fnName },
+        inputValues = new Map(),
+        focusStack = [],
+        actions = {},
+      ) {
+        const current = focusStack[focusStack.length - 1] ?? {
+          title: fnName ? `${fnName}( )` : "root",
+          steps,
+          fromStepId: null,
+        };
+        const activeSteps = current.steps;
+        const localProduced = buildLocalProducedMap(activeSteps, params);
+
+        // Pre-seed colors for all packages & vars so colors are stable
+        for (const { name } of imports) pkgColor(name);
+        for (const s of activeSteps) {
+          if (s.parallel) {
+            for (const c of s.calls) if (c.object) pkgColor(c.object);
+          } else {
+            if (s.object) pkgColor(s.object);
+          }
+        }
+        for (const [k, v] of localProduced) if (v !== -1) varColor(k);
+        for (const [k, v] of produced) if (v !== -1) varColor(k);
+
+        const panel = document.getElementById("flow-panel");
+        panel.innerHTML = "";
+
+        const toolbar = el("div", "flow-toolbar");
+        if (focusStack.length > 0) {
+          const back = el("button", "back-btn");
+          back.type = "button";
+          back.textContent = "Back";
+          back.addEventListener("click", () => actions.onBack?.());
+          toolbar.appendChild(back);
+        }
+
+        const rootBtn = el(
+          "button",
+          `crumb-btn ${focusStack.length === 0 ? "is-active" : ""}`,
+        );
+        rootBtn.type = "button";
+        rootBtn.textContent = fnName ? `${fnName}( )` : "root";
+        rootBtn.addEventListener("click", () => actions.onRoot?.());
+        toolbar.appendChild(rootBtn);
+
+        focusStack.forEach((item, idx) => {
+          const b = el(
+            "button",
+            `crumb-btn ${idx === focusStack.length - 1 ? "is-active" : ""}`,
+          );
+          b.type = "button";
+          b.textContent = item.title;
+          b.addEventListener("click", () => actions.onCrumb?.(idx));
+          toolbar.appendChild(b);
+        });
+
+        panel.appendChild(toolbar);
+
+        // ── Imports ──
+        if (focusStack.length === 0) {
+          const impBlock = el("div", "imports-block");
+          impBlock.appendChild(label("Imports"));
+          const impCard = el("div", "imports-card");
+          for (const { name, module } of imports) {
+            const c = pkgColor(name);
+            const row = el("div", "import-row");
+            row.innerHTML =
+              `<span class="i-kw">import</span>` +
+              `<span class="pkg-pill" style="background:${c}">${name}</span>` +
+              `<span class="i-from">from</span>` +
+              `<span class="i-mod">'${module}'</span>`;
+            impCard.appendChild(row);
+          }
+          impBlock.appendChild(impCard);
+          panel.appendChild(impBlock);
+        }
+
+        // ── Steps ──
+        const stepsBlock = el("div", "steps-block");
+        stepsBlock.appendChild(
+          label(focusStack.length === 0 ? "Execution Flow" : current.title),
+        );
+
+        activeSteps.forEach((step, i) => {
+          const row = el("div", "step-row");
+          const nestedBlocks = getNestedBlocks(step);
+
+          if (!step.parallel) {
+            // ── Sequential step ────────────────────────────────
+            const pkgC = step.object ? pkgColor(step.object) : "#8b949e";
+
+            const spine = el("div", "spine");
+            const circle = el("div", "step-circle");
+            circle.textContent = i + 1;
+            circle.style.borderColor = pkgC;
+            circle.style.color = pkgC;
+            spine.appendChild(circle);
+            row.appendChild(spine);
+
+            const card = el("div", "step-card");
+            card.style.borderLeftColor = pkgC;
+            if (nestedBlocks.length > 0) card.classList.add("has-nested");
+            if (step.id === current.fromStepId)
+              card.classList.add("origin-focus");
+
+            const top = el("div", "step-top");
+            if (step.isAwait)
+              top.appendChild(badge("async", null, "async-badge"));
+            const pp = el("span", "pkg-pill");
+            pp.textContent = step.object ?? "?";
+            pp.style.background = pkgC;
+            top.appendChild(pp);
+            const ml = el("span", "method-label");
+            ml.textContent = step.object ? `.${step.method}` : `${step.method}`;
+            top.appendChild(ml);
+            const pr = el("span", "paren");
+            pr.textContent = "( )";
+            top.appendChild(pr);
+            card.appendChild(top);
+
+            if (step.args.length > 0) {
+              const argsRow = el("div", "step-args");
+              for (const arg of step.args)
+                argsRow.appendChild(
+                  makeArgChip(arg, localProduced, produced, inputValues),
+                );
+              card.appendChild(argsRow);
+            }
+
+            if (step.produces) card.appendChild(makeProducesRow(step.produces));
+
+            if (nestedBlocks.length > 0) {
+              const controls = el("div", "nested-controls");
+              for (const block of nestedBlocks) {
+                controls.appendChild(
+                  badge(
+                    `${block.label} · ${block.steps.length}`,
+                    null,
+                    `branch-tag ${block.label}`,
+                  ),
+                );
+                const open = el("button", "focus-btn");
+                open.type = "button";
+                open.textContent = `Open ${block.label}`;
+                open.addEventListener("click", () =>
+                  actions.onOpen?.({
+                    title: `${formatStepLabel(step)} · ${block.label}`,
+                    steps: block.steps,
+                    fromStepId: step.id,
+                  }),
+                );
+                controls.appendChild(open);
+              }
+              card.appendChild(controls);
+            }
+
+            row.appendChild(card);
+          } else {
+            // ── Parallel step (Promise.all) ─────────────────────
+            const spine = el("div", "spine");
+            const circle = el("div", "step-circle");
+            circle.textContent = i + 1;
+            circle.style.borderColor = "#f59e0b";
+            circle.style.color = "#f59e0b";
+            spine.appendChild(circle);
+            row.appendChild(spine);
+
+            const group = el("div", "parallel-group");
+
+            const banner = el("div", "parallel-banner");
+            banner.innerHTML =
+              `<span style="font-size:.9rem">⇉</span>` +
+              `<span>parallel</span>` +
+              `<span style="opacity:.4">·</span>` +
+              `<span style="font-family:monospace;font-weight:700;color:#ffa657">Promise.all</span>` +
+              (step.isAwait
+                ? `<span class="async-badge" style="margin-left:auto">async</span>`
+                : "");
+            group.appendChild(banner);
+
+            const lanes = el("div", "parallel-lanes");
+            lanes.style.gridTemplateColumns = `repeat(${step.calls.length}, 1fr)`;
+
+            for (const call of step.calls) {
+              const pkgC = call.object ? pkgColor(call.object) : "#8b949e";
+              const lane = el("div", "parallel-lane");
+              lane.style.borderTop = `2px solid ${pkgC}`;
+              const laneNested = getNestedBlocks(call);
+
+              const laneTop = el("div", "lane-top");
+              const pp = el("span", "pkg-pill");
+              pp.textContent = call.object ?? "?";
+              pp.style.background = pkgC;
+              laneTop.appendChild(pp);
+              const ml = el("span", "method-label");
+              ml.textContent = call.object
+                ? `.${call.method}`
+                : `${call.method}`;
+              laneTop.appendChild(ml);
+              const pr = el("span", "paren");
+              pr.textContent = "( )";
+              laneTop.appendChild(pr);
+              lane.appendChild(laneTop);
+
+              if (call.args.length > 0) {
+                const argsRow = el("div", "step-args");
+                for (const arg of call.args)
+                  argsRow.appendChild(
+                    makeArgChip(arg, localProduced, produced, inputValues),
+                  );
+                lane.appendChild(argsRow);
+              }
+
+              if (laneNested.length > 0) {
+                const controls = el("div", "nested-controls");
+                for (const block of laneNested) {
+                  controls.appendChild(
+                    badge(
+                      `${block.label} · ${block.steps.length}`,
+                      null,
+                      `branch-tag ${block.label}`,
+                    ),
+                  );
+                  const open = el("button", "focus-btn");
+                  open.type = "button";
+                  open.textContent = `Open ${block.label}`;
+                  open.addEventListener("click", () =>
+                    actions.onOpen?.({
+                      title: `${formatStepLabel(call)} · ${block.label}`,
+                      steps: block.steps,
+                      fromStepId: call.id,
+                    }),
+                  );
+                  controls.appendChild(open);
+                }
+                lane.appendChild(controls);
+              }
+
+              lanes.appendChild(lane);
+            }
+
+            group.appendChild(lanes);
+            row.appendChild(group);
+          }
+
+          stepsBlock.appendChild(row);
+
+          // ── Connector ──────────────────────────────────────────
+          if (i < activeSteps.length - 1) {
+            const nextStep = activeSteps[i + 1];
+            const nextArgs = nextStep.parallel
+              ? nextStep.calls.flatMap((c) => c.args)
+              : nextStep.args ?? [];
+            const depVars = [];
+            for (const arg of nextArgs) {
+              if (
+                arg.refVar != null &&
+                localProduced.get(arg.refVar) === i &&
+                !depVars.includes(arg.refVar)
+              )
+                depVars.push(arg.refVar);
+            }
+
+            const seg = el("div", "connector-segment");
+            const cspine = el("div", "connector-spine");
+
+            if (depVars.length > 0) {
+              const vc = varColor(depVars[0]);
+              const line = el("div", "spine-line");
+              line.style.background = `linear-gradient(to bottom, ${vc}, ${vc}90)`;
+              line.style.opacity = "0.5";
+              cspine.appendChild(line);
+              const cbody = el("div", "connector-body");
+              cbody.textContent = "↓";
+              for (const v of depVars) {
+                const vc2 = varColor(v);
+                const vb = el("span", "dep-var-badge");
+                vb.textContent = v;
+                vb.style.background = `color-mix(in srgb, ${vc2} 20%, #21262d)`;
+                vb.style.color = vc2;
+                cbody.appendChild(vb);
+              }
+              seg.appendChild(cspine);
+              seg.appendChild(cbody);
+            } else {
+              const line = el("div", "spine-line");
+              line.style.background = "#21262d";
+              line.style.opacity = "0.4";
+              cspine.appendChild(line);
+              seg.appendChild(cspine);
+            }
+            stepsBlock.appendChild(seg);
+          }
+        });
+
+        panel.appendChild(stepsBlock);
+      }
+
+      function el(tag, cls) {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        return e;
+      }
+
+      function label(text) {
+        const e = el("div", "section-head");
+        e.textContent = text;
+        return e;
+      }
+
+      function makeArgChip(arg, localProduced, globalProduced, inputValues) {
+        const chip = el("span", "arg-chip");
+        const refStepIdx =
+          arg.refVar != null ? localProduced.get(arg.refVar) : undefined;
+        if (refStepIdx === -1) {
+          // Input parameter reference
+          chip.classList.add("is-ref");
+          chip.style.setProperty("--rc", INPUT_COLOR);
+          const argText = el("span");
+          argText.textContent = arg.text;
+          chip.appendChild(argText);
+          const val = inputValues?.get(arg.refVar);
+          const badge = el("span", "arg-input-badge");
+          badge.textContent =
+            val != null && val !== "" ? JSON.stringify(val) : "← input";
+          chip.appendChild(badge);
+        } else if (refStepIdx != null) {
+          const rc = varColor(arg.refVar);
+          chip.classList.add("is-ref");
+          chip.style.setProperty("--rc", rc);
+          const argText = el("span");
+          argText.textContent = arg.text;
+          const ref = el("span", "arg-step-ref");
+          ref.textContent = `← step ${refStepIdx + 1}`;
+          chip.appendChild(argText);
+          chip.appendChild(ref);
+        } else if (
+          arg.refVar != null &&
+          globalProduced.get(arg.refVar) != null
+        ) {
+          const g = globalProduced.get(arg.refVar);
+          const rc = varColor(arg.refVar);
+          chip.classList.add("is-ref");
+          chip.style.setProperty("--rc", rc);
+          const argText = el("span");
+          argText.textContent = arg.text;
+          const ref = el("span", "arg-step-ref");
+          ref.textContent = g === -1 ? "← input" : "← outer";
+          chip.appendChild(argText);
+          chip.appendChild(ref);
+        } else {
+          chip.textContent = arg.text;
+        }
+        return chip;
+      }
+
+      function makeProducesRow(varName) {
+        const vc = varColor(varName);
+        const prod = el("div", "step-produces");
+        const lbl = el("span", "produces-lbl");
+        lbl.textContent = "returns";
+        const arr = el("span", "produces-arrow");
+        arr.textContent = "→";
+        const chip = el("span", "produces-chip");
+        chip.textContent = varName;
+        chip.style.background = vc;
+        prod.appendChild(lbl);
+        prod.appendChild(arr);
+        prod.appendChild(chip);
+        return prod;
+      }
+
+      function badge(text, color, cls) {
+        const e = el("span", cls ?? "badge");
+        e.textContent = text;
+        if (color) e.style.background = color;
+        return e;
+      }
+
+      // ── Main ──────────────────────────────────────────────────────────────────
+
+      async function run() {
+        const editor = document.getElementById("editor");
+        const inputsSection = document.getElementById("inputs-section");
+        editor.value = SOURCE;
+
+        await Parser.init({
+          locateFile: (s) =>
+            `https://cdn.jsdelivr.net/npm/web-tree-sitter/${s}`,
+        });
+        const parser = new Parser();
+        const JS = await Language.load(
+          "https://cdn.jsdelivr.net/npm/tree-sitter-javascript/tree-sitter-javascript.wasm",
+        );
+        parser.setLanguage(JS);
+
+        let lastAnalysis = null;
+        const inputValues = new Map();
+        const focusStack = [];
+
+        function rerender() {
+          if (!lastAnalysis) return;
+          render(lastAnalysis, inputValues, focusStack, {
+            onBack: () => {
+              focusStack.pop();
+              rerender();
+            },
+            onRoot: () => {
+              focusStack.length = 0;
+              rerender();
+            },
+            onCrumb: (idx) => {
+              focusStack.splice(idx + 1);
+              rerender();
+            },
+            onOpen: (view) => {
+              focusStack.push(view);
+              rerender();
+            },
+          });
+        }
+
+        // Rebuild the Inputs section when params change (on code edit).
+        // Lives in the left panel so input focus is never disturbed by rerenders.
+        function updateInputsSection(params) {
+          if (!params || params.length === 0) {
+            inputsSection.style.display = "none";
+            inputsSection.innerHTML = "";
+            return;
+          }
+          inputsSection.style.display = "";
+          inputsSection.innerHTML = `<div class="panel-header">Inputs</div>`;
+          for (const { name } of params) {
+            const row = el("div", "input-row");
+            const lbl = el("label", "input-param-label");
+            lbl.textContent = name;
+            lbl.htmlFor = `input-field-${name}`;
+            const field = el("input", "input-field");
+            field.id = `input-field-${name}`;
+            field.dataset.param = name;
+            field.type = "text";
+            field.autocomplete = "off";
+            field.spellcheck = false;
+            field.placeholder = `value for ${name}…`;
+            if (inputValues.has(name)) field.value = inputValues.get(name);
+            field.addEventListener("input", () => {
+              inputValues.set(name, field.value);
+              rerender(); // instant — no re-parse needed
+            });
+            row.appendChild(lbl);
+            row.appendChild(field);
+            inputsSection.appendChild(row);
+          }
+        }
+
+        function reparse() {
+          try {
+            const tree = parser.parse(editor.value);
+            lastAnalysis = analyzeAST(tree.rootNode);
+            focusStack.length = 0;
+            updateInputsSection(lastAnalysis.params);
+            rerender();
+          } catch (e) {
+            document.getElementById(
+              "flow-panel",
+            ).innerHTML = `<p class="status">Parse error: ${e.message}</p>`;
+          }
+        }
+
+        reparse();
+
+        let debounce;
+        editor.addEventListener("input", () => {
+          clearTimeout(debounce);
+          debounce = setTimeout(reparse, 280);
+        });
+      }
+
+      run();
+    </script>
+  </body>
+</html>
