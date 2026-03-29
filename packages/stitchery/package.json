@@ -1,3 +1,5 @@
 {
-    "name": "@aprovan/stitchery"
+    "name": "@aprovan/stitchery",
+    "version": "0.1.1",
+    "description": "Serve and manage API definitions for 3rd party integrations"
 }

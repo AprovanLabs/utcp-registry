@@ -1,0 +1,5 @@
+{
+    "name": "@aprovan/stitchery-bundler",
+    "version": "0.1.1",
+    "description": "Combine API definitions with documentation to automatically generate high-quality 3rd party integrations"
+}
