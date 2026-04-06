@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "utdk": ["../../packages/utdk/dist/index.d.ts"],
+      "utdk/*": ["../../packages/utdk/dist/*"]
+    }
+  },
+  "include": ["src/**/*.ts"]
+}

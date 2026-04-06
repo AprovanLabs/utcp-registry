@@ -13,6 +13,7 @@
     "clean": "turbo run clean && rm -rf node_modules packages/*/node_modules packages/*/dist"
   },
   "devDependencies": {
+    "@types/node": "^25.5.0",
     "@typescript-eslint/eslint-plugin": "^8.14.0",
     "@typescript-eslint/parser": "^8.14.0",
     "eslint": "^8.57.0",

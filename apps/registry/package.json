@@ -1,4 +1,16 @@
 {
-    "name": "@aprovan/registry",
-    "description": "Registry UI for managed 3rd party applications"
+  "name": "@aprovan/registry",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Registry for versioned 3rd party applications",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "utdk": "workspace:*"
+  }
 }

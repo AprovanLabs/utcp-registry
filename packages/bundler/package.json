@@ -1,5 +1,20 @@
 {
-    "name": "@aprovan/stitchery-bundler",
-    "version": "0.1.1",
-    "description": "Combine API definitions with documentation to automatically generate high-quality 3rd party integrations"
+  "name": "@aprovan/stitchery-bundler",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "description": "Combine API definitions with documentation to automatically generate high-quality 3rd party integrations",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist",
+    "generate": "tsx src/cli.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@utcp/http": "^1.1.1",
+    "@utcp/sdk": "^1.1.0",
+    "openapi-types": "^12.1.3"
+  }
 }
