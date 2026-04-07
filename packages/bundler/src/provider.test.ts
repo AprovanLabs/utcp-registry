@@ -6,6 +6,11 @@ import {
   getProviderPackageName,
   normalizeProviderName,
   resolveProvider,
+  resolveProviderDocsCacheDir,
+  resolveProviderDocsIndexPath,
+  resolveProviderDocsManifestPath,
+  resolveProviderDocsOutputDir,
+  resolveProviderDocsSourcesDir,
   resolveProviderOutputDir,
   stripProviderToolName,
 } from "./provider.js";
@@ -54,5 +59,13 @@ describe("provider naming helpers", () => {
 
     expect(getPrimaryProviderAuthOption({ auth: apiKeyAuth })).toEqual(apiKeyAuth);
     expect(getPrimaryProviderAuthOption({ auth: [apiKeyAuth, oauthAuth] })).toEqual(apiKeyAuth);
+  });
+
+  it("resolves provider docs cache and output paths", () => {
+    expect(resolveProviderDocsCacheDir("google.books", "/tmp/cache")).toBe("/tmp/cache/google/books");
+    expect(resolveProviderDocsManifestPath("google.books", "/tmp/cache")).toBe("/tmp/cache/google/books/manifest.json");
+    expect(resolveProviderDocsSourcesDir("google.books", "/tmp/cache")).toBe("/tmp/cache/google/books/sources");
+    expect(resolveProviderDocsIndexPath("google.books", "/tmp/cache")).toBe("/tmp/cache/google/books/index.md");
+    expect(resolveProviderDocsOutputDir("google.books", "/tmp/out")).toBe("/tmp/out/google/books/docs");
   });
 });
