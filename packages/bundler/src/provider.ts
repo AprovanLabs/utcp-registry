@@ -29,6 +29,7 @@ export type RegistryProviderOperationsOptions = {
 
 export const REGISTRY_PATH = resolveRepoPath("data", "registry.json");
 export const DEFAULT_OUTPUT_ROOT = resolveRepoPath("packages", "utdk");
+export const DEFAULT_DOCS_CACHE_ROOT = resolveRepoPath(".registry");
 
 export function resolveRepoPath(...segments: string[]): string {
   return path.join(fileURLToPath(new URL("../../..", import.meta.url)), ...segments);
@@ -142,4 +143,24 @@ export function resolveProviderOutputDir(providerName: string, outputRoot: strin
 
 export function resolveProviderPackageRootDir(providerName: string, outputRoot: string): string {
   return path.join(outputRoot, getProviderPackageRootName(providerName));
+}
+
+export function resolveProviderDocsCacheDir(providerName: string, docsCacheRoot = DEFAULT_DOCS_CACHE_ROOT): string {
+  return path.join(docsCacheRoot, ...splitProviderName(providerName));
+}
+
+export function resolveProviderDocsManifestPath(providerName: string, docsCacheRoot = DEFAULT_DOCS_CACHE_ROOT): string {
+  return path.join(resolveProviderDocsCacheDir(providerName, docsCacheRoot), "manifest.json");
+}
+
+export function resolveProviderDocsSourcesDir(providerName: string, docsCacheRoot = DEFAULT_DOCS_CACHE_ROOT): string {
+  return path.join(resolveProviderDocsCacheDir(providerName, docsCacheRoot), "sources");
+}
+
+export function resolveProviderDocsIndexPath(providerName: string, docsCacheRoot = DEFAULT_DOCS_CACHE_ROOT): string {
+  return path.join(resolveProviderDocsCacheDir(providerName, docsCacheRoot), "index.md");
+}
+
+export function resolveProviderDocsOutputDir(providerName: string, outputRoot = DEFAULT_OUTPUT_ROOT): string {
+  return path.join(resolveProviderOutputDir(providerName, outputRoot), "docs");
 }
