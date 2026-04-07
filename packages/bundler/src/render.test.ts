@@ -260,6 +260,58 @@ describe("nested provider rendering", () => {
     expect(rendered).toContain('"var_name": "Authorization"');
   });
 
+  it("includes provider OpenAPI icon metadata in package json utdk metadata", () => {
+    const rendered = renderProviderPackageJson(
+      {
+        name: "google/drive",
+        url: "https://example.com/google-drive.json",
+      },
+      {
+        openapi: "3.0.0",
+        info: {
+          title: "Google Drive",
+          version: "1.0.0",
+          "x-logo": {
+            url: "https://example.com/google-drive.png",
+          },
+        },
+      } as never,
+      undefined,
+      new Date("2026-04-07T00:00:00.000Z"),
+    );
+
+    expect(rendered).toContain('"icon": "https://example.com/google-drive.png"');
+  });
+
+  it("prefers registry OpenAPI icon metadata over the OpenAPI document", () => {
+    const rendered = renderProviderPackageJson(
+      {
+        name: "google/drive",
+        url: "https://example.com/google-drive.json",
+        options: {
+          openapi: {
+            icon: "https://example.com/registry-google-drive.png",
+          },
+        },
+      },
+      {
+        openapi: "3.0.0",
+        info: {
+          title: "Google Drive",
+          version: "1.0.0",
+          "x-logo": {
+            url: "https://example.com/google-drive.png",
+          },
+        },
+      } as never,
+      undefined,
+      new Date("2026-04-07T00:00:00.000Z"),
+    );
+
+    expect(rendered).toContain('"icon": "https://example.com/registry-google-drive.png"');
+    expect(rendered).not.toContain('"icon": "https://example.com/google-drive.png"');
+  });
+
   it("renders a leaf package json for nested providers", () => {
     const rendered = renderProviderPackageJson(
       {

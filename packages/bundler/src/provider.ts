@@ -15,7 +15,12 @@ export type RegistryProviderAuthOption = Record<string, unknown>;
 
 export type RegistryProviderOptions = {
   auth?: RegistryProviderAuthOption | RegistryProviderAuthOption[];
+  openapi?: RegistryProviderOpenApiOptions;
   operations?: RegistryProviderOperationsOptions;
+};
+
+export type RegistryProviderOpenApiOptions = {
+  icon?: string;
 };
 
 export type RegistryProviderOperationsOptions = {

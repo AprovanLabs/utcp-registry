@@ -7,6 +7,7 @@ import { schemaToTypeScriptType } from "./schema.js";
 
 export type ToolRuntimeMetadata = {
   accessPath: string[];
+  bodyAllowsAdditionalProperties?: boolean;
   bodyKind: "none" | "properties" | "raw";
   bodyPropertyKeys: string[];
   contentType?: string;
@@ -43,6 +44,8 @@ type RequestDefinition = {
   bodySchema?: OpenAPIV3.SchemaObject;
   parameters: ParameterDefinition[];
 };
+
+type AdditionalProperties = OpenAPIV3.SchemaObject["additionalProperties"];
 
 function isReferenceObject(value: unknown): value is OpenAPIV3.ReferenceObject {
   return Boolean(value && typeof value === "object" && "$ref" in value);
@@ -205,11 +208,13 @@ function resolveRequestBody(
 function toObjectSchema(
   properties: Record<string, OpenAPIV3.SchemaObject>,
   required: string[] = [],
+  additionalProperties?: AdditionalProperties,
 ): OpenAPIV3.SchemaObject {
   return {
     type: "object",
     ...(Object.keys(properties).length > 0 ? { properties } : {}),
     ...(required.length > 0 ? { required } : {}),
+    ...(additionalProperties !== undefined ? { additionalProperties } : {}),
   };
 }
 
@@ -319,7 +324,11 @@ function buildRequestDefinition(document: OpenAPIV3.Document, tool: Tool): Reque
 
 function flattenObjectSchema(
   schema: OpenAPIV3.SchemaObject | undefined,
-): { properties: Record<string, OpenAPIV3.SchemaObject>; required: string[] } | undefined {
+): {
+  additionalProperties?: AdditionalProperties;
+  properties: Record<string, OpenAPIV3.SchemaObject>;
+  required: string[];
+} | undefined {
   if (!schema || typeof schema !== "object") {
     return undefined;
   }
@@ -334,12 +343,9 @@ function flattenObjectSchema(
     return undefined;
   }
 
-  if (schema.additionalProperties) {
-    return undefined;
-  }
-
   const properties: Record<string, OpenAPIV3.SchemaObject> = {};
   const required = new Set<string>(Array.isArray(schema.required) ? schema.required : []);
+  let additionalProperties = schema.additionalProperties;
 
   if (schema.properties) {
     Object.assign(
@@ -362,10 +368,19 @@ function flattenObjectSchema(
     for (const key of flattenedItem.required) {
       required.add(key);
     }
+
+    if (flattenedItem.additionalProperties !== undefined) {
+      if (additionalProperties !== undefined) {
+        return undefined;
+      }
+
+      additionalProperties = flattenedItem.additionalProperties;
+    }
   }
 
   return Object.keys(properties).length > 0
     ? {
+        ...(additionalProperties !== undefined ? { additionalProperties } : {}),
         properties,
         required: [...required],
       }
@@ -379,6 +394,7 @@ function buildInputSchema(request: RequestDefinition): {
 } {
   const flattenedBodySchema = flattenObjectSchema(request.bodySchema);
   const bodyPropertySchemas = flattenedBodySchema?.properties;
+  const bodyAdditionalProperties = flattenedBodySchema?.additionalProperties;
   const bodyPropertyKeys = bodyPropertySchemas ? Object.keys(bodyPropertySchemas) : [];
   const pathParameters = request.parameters.filter((parameter) => parameter.location === "path");
   const queryParameters = request.parameters.filter((parameter) => parameter.location === "query");
@@ -425,9 +441,10 @@ function buildInputSchema(request: RequestDefinition): {
 
   return {
     hasInput: Object.keys(properties).length > 0,
-    schema: toObjectSchema(properties, [...required]),
+    schema: toObjectSchema(properties, [...required], bodyPropertySchemas ? bodyAdditionalProperties : undefined),
     runtimeMetadata: {
       accessPath: [],
+      bodyAllowsAdditionalProperties: Boolean(bodyPropertySchemas && bodyAdditionalProperties),
       bodyKind: bodyPropertySchemas ? "properties" : request.bodySchema ? "raw" : "none",
       bodyPropertyKeys,
       contentType: undefined,

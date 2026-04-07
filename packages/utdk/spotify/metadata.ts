@@ -5,6 +5,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAnAlbum"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -24,6 +25,7 @@ export const toolMetadata = {
     "accessPath": [
       "getMultipleAlbums"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -42,6 +44,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAnAlbumsTracks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -63,6 +66,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAnArtist"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -80,6 +84,7 @@ export const toolMetadata = {
     "accessPath": [
       "getMultipleArtists"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -97,6 +102,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAnArtistsAlbums"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -119,6 +125,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAnArtistsTopTracks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -138,6 +145,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAnArtistsRelatedArtists"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -155,6 +163,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAShow"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -174,6 +183,7 @@ export const toolMetadata = {
     "accessPath": [
       "getMultipleShows"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -192,6 +202,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAShowsEpisodes"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -213,6 +224,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAnEpisode"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -232,6 +244,7 @@ export const toolMetadata = {
     "accessPath": [
       "getMultipleEpisodes"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -250,6 +263,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAnAudiobook"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -269,6 +283,7 @@ export const toolMetadata = {
     "accessPath": [
       "getMultipleAudiobooks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -287,6 +302,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAudiobookChapters"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -308,6 +324,7 @@ export const toolMetadata = {
     "accessPath": [
       "getUsersSavedAudiobooks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -326,6 +343,7 @@ export const toolMetadata = {
     "accessPath": [
       "saveAudiobooksUser"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -343,6 +361,7 @@ export const toolMetadata = {
     "accessPath": [
       "removeAudiobooksUser"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -360,6 +379,7 @@ export const toolMetadata = {
     "accessPath": [
       "checkUsersSavedAudiobooks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -377,6 +397,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAChapter"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -396,6 +417,7 @@ export const toolMetadata = {
     "accessPath": [
       "getSeveralChapters"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -414,6 +436,7 @@ export const toolMetadata = {
     "accessPath": [
       "getTrack"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -433,6 +456,7 @@ export const toolMetadata = {
     "accessPath": [
       "getSeveralTracks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -451,6 +475,7 @@ export const toolMetadata = {
     "accessPath": [
       "search"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -473,6 +498,7 @@ export const toolMetadata = {
     "accessPath": [
       "getCurrentUsersProfile"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -488,6 +514,7 @@ export const toolMetadata = {
     "accessPath": [
       "getPlaylist"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -509,8 +536,14 @@ export const toolMetadata = {
     "accessPath": [
       "changePlaylistDetails"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "name",
+      "public",
+      "collaborative",
+      "description"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
@@ -526,6 +559,7 @@ export const toolMetadata = {
     "accessPath": [
       "getPlaylistsTracks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -549,8 +583,12 @@ export const toolMetadata = {
     "accessPath": [
       "addTracksToPlaylist"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "uris",
+      "position"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "POST",
@@ -559,7 +597,10 @@ export const toolMetadata = {
     "pathParameterKeys": [
       "playlist_id"
     ],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "position",
+      "uris"
+    ],
     "queryParameterKeys": [
       "position",
       "uris"
@@ -569,8 +610,15 @@ export const toolMetadata = {
     "accessPath": [
       "reorderOrReplacePlaylistsTracks"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "uris",
+      "range_start",
+      "insert_before",
+      "range_length",
+      "snapshot_id"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
@@ -579,7 +627,9 @@ export const toolMetadata = {
     "pathParameterKeys": [
       "playlist_id"
     ],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "uris"
+    ],
     "queryParameterKeys": [
       "uris"
     ]
@@ -588,6 +638,7 @@ export const toolMetadata = {
     "accessPath": [
       "removeTracksPlaylist"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "properties",
     "bodyPropertyKeys": [
       "tracks",
@@ -608,6 +659,7 @@ export const toolMetadata = {
     "accessPath": [
       "getPlaylistsItems"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -631,8 +683,12 @@ export const toolMetadata = {
     "accessPath": [
       "addItemsToPlaylist"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "uris",
+      "position"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "POST",
@@ -641,7 +697,10 @@ export const toolMetadata = {
     "pathParameterKeys": [
       "playlist_id"
     ],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "position",
+      "uris"
+    ],
     "queryParameterKeys": [
       "position",
       "uris"
@@ -651,8 +710,15 @@ export const toolMetadata = {
     "accessPath": [
       "reorderOrReplacePlaylistsItems"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "uris",
+      "range_start",
+      "insert_before",
+      "range_length",
+      "snapshot_id"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
@@ -661,7 +727,9 @@ export const toolMetadata = {
     "pathParameterKeys": [
       "playlist_id"
     ],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "uris"
+    ],
     "queryParameterKeys": [
       "uris"
     ]
@@ -670,6 +738,7 @@ export const toolMetadata = {
     "accessPath": [
       "removeItemsPlaylist"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "properties",
     "bodyPropertyKeys": [
       "items",
@@ -690,6 +759,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAListOfCurrentUsersPlaylists"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -708,8 +778,14 @@ export const toolMetadata = {
     "accessPath": [
       "createPlaylist"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "name",
+      "public",
+      "collaborative",
+      "description"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "POST",
@@ -723,6 +799,7 @@ export const toolMetadata = {
     "accessPath": [
       "saveLibraryItems"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -740,6 +817,7 @@ export const toolMetadata = {
     "accessPath": [
       "removeLibraryItems"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -757,6 +835,7 @@ export const toolMetadata = {
     "accessPath": [
       "checkLibraryContains"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -774,6 +853,7 @@ export const toolMetadata = {
     "accessPath": [
       "getUsersSavedAlbums"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -793,15 +873,20 @@ export const toolMetadata = {
     "accessPath": [
       "saveAlbumsUser"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "ids"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
     "pathTemplate": "/v1/me/albums",
     "pathConflictKeys": [],
     "pathParameterKeys": [],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "ids"
+    ],
     "queryParameterKeys": [
       "ids"
     ]
@@ -810,15 +895,20 @@ export const toolMetadata = {
     "accessPath": [
       "removeAlbumsUser"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "ids"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "DELETE",
     "pathTemplate": "/v1/me/albums",
     "pathConflictKeys": [],
     "pathParameterKeys": [],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "ids"
+    ],
     "queryParameterKeys": [
       "ids"
     ]
@@ -827,6 +917,7 @@ export const toolMetadata = {
     "accessPath": [
       "checkUsersSavedAlbums"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -844,6 +935,7 @@ export const toolMetadata = {
     "accessPath": [
       "getUsersSavedTracks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -863,8 +955,12 @@ export const toolMetadata = {
     "accessPath": [
       "saveTracksUser"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "ids",
+      "timestamped_ids"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
@@ -878,15 +974,20 @@ export const toolMetadata = {
     "accessPath": [
       "removeTracksUser"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "ids"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "DELETE",
     "pathTemplate": "/v1/me/tracks",
     "pathConflictKeys": [],
     "pathParameterKeys": [],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "ids"
+    ],
     "queryParameterKeys": [
       "ids"
     ]
@@ -895,6 +996,7 @@ export const toolMetadata = {
     "accessPath": [
       "checkUsersSavedTracks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -912,6 +1014,7 @@ export const toolMetadata = {
     "accessPath": [
       "getUsersSavedEpisodes"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -931,15 +1034,20 @@ export const toolMetadata = {
     "accessPath": [
       "saveEpisodesUser"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "ids"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
     "pathTemplate": "/v1/me/episodes",
     "pathConflictKeys": [],
     "pathParameterKeys": [],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "ids"
+    ],
     "queryParameterKeys": [
       "ids"
     ]
@@ -948,15 +1056,20 @@ export const toolMetadata = {
     "accessPath": [
       "removeEpisodesUser"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "ids"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "DELETE",
     "pathTemplate": "/v1/me/episodes",
     "pathConflictKeys": [],
     "pathParameterKeys": [],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "ids"
+    ],
     "queryParameterKeys": [
       "ids"
     ]
@@ -965,6 +1078,7 @@ export const toolMetadata = {
     "accessPath": [
       "checkUsersSavedEpisodes"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -982,6 +1096,7 @@ export const toolMetadata = {
     "accessPath": [
       "getUsersSavedShows"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1000,6 +1115,7 @@ export const toolMetadata = {
     "accessPath": [
       "saveShowsUser"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1017,6 +1133,7 @@ export const toolMetadata = {
     "accessPath": [
       "removeShowsUser"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1035,6 +1152,7 @@ export const toolMetadata = {
     "accessPath": [
       "checkUsersSavedShows"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1052,6 +1170,7 @@ export const toolMetadata = {
     "accessPath": [
       "getUsersTopArtistsAndTracks"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1073,6 +1192,7 @@ export const toolMetadata = {
     "accessPath": [
       "getUsersProfile"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1090,6 +1210,7 @@ export const toolMetadata = {
     "accessPath": [
       "getListUsersPlaylists"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1110,8 +1231,14 @@ export const toolMetadata = {
     "accessPath": [
       "createPlaylistForUser"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "name",
+      "public",
+      "collaborative",
+      "description"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "POST",
@@ -1127,8 +1254,11 @@ export const toolMetadata = {
     "accessPath": [
       "followPlaylist"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "public"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
@@ -1144,6 +1274,7 @@ export const toolMetadata = {
     "accessPath": [
       "unfollowPlaylist"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1161,6 +1292,7 @@ export const toolMetadata = {
     "accessPath": [
       "getFeaturedPlaylists"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1180,6 +1312,7 @@ export const toolMetadata = {
     "accessPath": [
       "getCategories"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1199,6 +1332,7 @@ export const toolMetadata = {
     "accessPath": [
       "getACategory"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1218,6 +1352,7 @@ export const toolMetadata = {
     "accessPath": [
       "getACategoriesPlaylists"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1238,6 +1373,7 @@ export const toolMetadata = {
     "accessPath": [
       "getPlaylistCover"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1255,6 +1391,7 @@ export const toolMetadata = {
     "accessPath": [
       "uploadCustomPlaylistCover"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "raw",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1272,6 +1409,7 @@ export const toolMetadata = {
     "accessPath": [
       "getNewReleases"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1290,6 +1428,7 @@ export const toolMetadata = {
     "accessPath": [
       "getFollowed"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1309,15 +1448,20 @@ export const toolMetadata = {
     "accessPath": [
       "followArtistsUsers"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "ids"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
     "pathTemplate": "/v1/me/following",
     "pathConflictKeys": [],
     "pathParameterKeys": [],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "ids"
+    ],
     "queryParameterKeys": [
       "type",
       "ids"
@@ -1327,15 +1471,20 @@ export const toolMetadata = {
     "accessPath": [
       "unfollowArtistsUsers"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "ids"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "DELETE",
     "pathTemplate": "/v1/me/following",
     "pathConflictKeys": [],
     "pathParameterKeys": [],
-    "queryConflictKeys": [],
+    "queryConflictKeys": [
+      "ids"
+    ],
     "queryParameterKeys": [
       "type",
       "ids"
@@ -1345,6 +1494,7 @@ export const toolMetadata = {
     "accessPath": [
       "checkCurrentUserFollows"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1363,6 +1513,7 @@ export const toolMetadata = {
     "accessPath": [
       "checkIfUserFollowsPlaylist"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1382,6 +1533,7 @@ export const toolMetadata = {
     "accessPath": [
       "getSeveralAudioFeatures"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1399,6 +1551,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAudioFeatures"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1416,6 +1569,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAudioAnalysis"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1433,6 +1587,7 @@ export const toolMetadata = {
     "accessPath": [
       "getRecommendations"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1496,6 +1651,7 @@ export const toolMetadata = {
     "accessPath": [
       "getRecommendationGenres"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1511,6 +1667,7 @@ export const toolMetadata = {
     "accessPath": [
       "getInformationAboutTheUsersCurrentPlayback"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1529,8 +1686,12 @@ export const toolMetadata = {
     "accessPath": [
       "transferAUsersPlayback"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "device_ids",
+      "play"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
@@ -1544,6 +1705,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAUsersAvailableDevices"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1559,6 +1721,7 @@ export const toolMetadata = {
     "accessPath": [
       "getTheUsersCurrentlyPlayingTrack"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1577,8 +1740,14 @@ export const toolMetadata = {
     "accessPath": [
       "startAUsersPlayback"
     ],
-    "bodyKind": "raw",
-    "bodyPropertyKeys": [],
+    "bodyAllowsAdditionalProperties": true,
+    "bodyKind": "properties",
+    "bodyPropertyKeys": [
+      "context_uri",
+      "uris",
+      "offset",
+      "position_ms"
+    ],
     "contentType": "application/json",
     "headerParameterKeys": [],
     "httpMethod": "PUT",
@@ -1594,6 +1763,7 @@ export const toolMetadata = {
     "accessPath": [
       "pauseAUsersPlayback"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1611,6 +1781,7 @@ export const toolMetadata = {
     "accessPath": [
       "skipUsersPlaybackToNextTrack"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1628,6 +1799,7 @@ export const toolMetadata = {
     "accessPath": [
       "skipUsersPlaybackToPreviousTrack"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1645,6 +1817,7 @@ export const toolMetadata = {
     "accessPath": [
       "seekToPositionInCurrentlyPlayingTrack"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1663,6 +1836,7 @@ export const toolMetadata = {
     "accessPath": [
       "setRepeatModeOnUsersPlayback"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1681,6 +1855,7 @@ export const toolMetadata = {
     "accessPath": [
       "setVolumeForUsersPlayback"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1699,6 +1874,7 @@ export const toolMetadata = {
     "accessPath": [
       "toggleShuffleForUsersPlayback"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1717,6 +1893,7 @@ export const toolMetadata = {
     "accessPath": [
       "getRecentlyPlayed"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1736,6 +1913,7 @@ export const toolMetadata = {
     "accessPath": [
       "getQueue"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1751,6 +1929,7 @@ export const toolMetadata = {
     "accessPath": [
       "addToQueue"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",
@@ -1769,6 +1948,7 @@ export const toolMetadata = {
     "accessPath": [
       "getAvailableMarkets"
     ],
+    "bodyAllowsAdditionalProperties": false,
     "bodyKind": "none",
     "bodyPropertyKeys": [],
     "contentType": "application/json",

@@ -40,6 +40,37 @@ function getNonEmptyString(value: unknown): string | undefined {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
 }
 
+function getOpenApiLogoUrl(value: unknown): string | undefined {
+  if (!value || typeof value !== "object") {
+    return undefined;
+  }
+
+  return getNonEmptyString((value as Record<string, unknown>).url);
+}
+
+function getProviderOpenApiIcon(
+  provider: Pick<RegistryProvider, "options">,
+  openApiDocument: OpenAPIV3.Document,
+): string | undefined {
+  const providerOverride = provider.options?.openapi?.icon?.trim();
+
+  if (providerOverride) {
+    return providerOverride;
+  }
+
+  const openApiInfo = openApiDocument.info as unknown as Record<string, unknown> | undefined;
+  const openApiDocumentRecord = openApiDocument as unknown as Record<string, unknown>;
+
+  return (
+    getNonEmptyString(openApiInfo?.icon) ??
+    getNonEmptyString(openApiInfo?.["x-icon"]) ??
+    getOpenApiLogoUrl(openApiInfo?.["x-logo"]) ??
+    getNonEmptyString(openApiDocumentRecord.icon) ??
+    getNonEmptyString(openApiDocumentRecord["x-icon"]) ??
+    getOpenApiLogoUrl(openApiDocumentRecord["x-logo"])
+  );
+}
+
 function normalizePackageBaseVersion(rawVersion: string | undefined): string {
   const version = rawVersion?.replace(/^v(?=\d)/u, "");
 
@@ -499,6 +530,7 @@ export function renderProviderPackageJson(
     getNonEmptyString(openApiDocument.info?.contact?.url) ??
     provider.url;
   const auth = getProviderAuthOptions(provider.options);
+  const icon = getProviderOpenApiIcon(provider, openApiDocument);
 
   const packageJson = {
     ...(includePackageName ? { name: `@utdk/${provider.name}` } : { private: true }),
@@ -518,6 +550,7 @@ export function renderProviderPackageJson(
         url: provider.url,
         version: sourceVersion ?? null,
         termsOfService: getNonEmptyString(openApiDocument.info?.termsOfService) ?? null,
+        ...(icon ? { icon } : {}),
       },
     },
   };

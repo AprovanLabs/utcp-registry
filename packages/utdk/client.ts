@@ -19,6 +19,7 @@ export type CreateClientOptions = {
 
 export type ToolRuntimeMetadata = {
   accessPath: string[];
+  bodyAllowsAdditionalProperties?: boolean;
   bodyKind: "none" | "properties" | "raw";
   bodyPropertyKeys: string[];
   contentType?: string;
@@ -187,14 +188,14 @@ export function assembleRequest(
   const headers: Record<string, unknown> = {};
   const hasExplicitBodyWrapper = hasOwn(sourceInput, "body");
   const transportConflictKeys = new Set([...metadata.pathConflictKeys, ...metadata.queryConflictKeys]);
+  let structuredBody = metadata.bodyKind === "properties" ? (isRecord(sourceInput.body) ? { ...sourceInput.body } : {}) : undefined;
   let body: unknown;
 
   if (metadata.bodyKind === "properties") {
-    const nextBody = isRecord(sourceInput.body) ? { ...sourceInput.body } : {};
-
     for (const key of metadata.bodyPropertyKeys) {
       if (hasOwn(sourceInput, key) && (!hasExplicitBodyWrapper || !transportConflictKeys.has(key))) {
-        nextBody[key] = sourceInput[key];
+        structuredBody ??= {};
+        structuredBody[key] = sourceInput[key];
         consumedKeys.add(key);
       }
     }
@@ -203,9 +204,6 @@ export function assembleRequest(
       consumedKeys.add("body");
     }
 
-    if (Object.keys(nextBody).length > 0) {
-      body = nextBody;
-    }
   } else if (metadata.bodyKind === "raw" && hasExplicitBodyWrapper) {
     body = sourceInput.body;
     consumedKeys.add("body");
@@ -233,8 +231,18 @@ export function assembleRequest(
 
   for (const [key, value] of Object.entries(sourceInput)) {
     if (!consumedKeys.has(key)) {
+      if (metadata.bodyKind === "properties" && metadata.bodyAllowsAdditionalProperties) {
+        structuredBody ??= {};
+        structuredBody[key] = value;
+        continue;
+      }
+
       queryParams[key] = value;
     }
+  }
+
+  if (metadata.bodyKind === "properties" && structuredBody && Object.keys(structuredBody).length > 0) {
+    body = structuredBody;
   }
 
   return {

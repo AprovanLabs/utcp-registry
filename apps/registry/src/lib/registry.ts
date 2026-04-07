@@ -31,6 +31,7 @@ type UtdkManifest = {
       url?: string;
       version?: string;
       termsOfService?: string;
+      icon?: string;
     };
   };
 };
@@ -57,6 +58,7 @@ export type RegistryEntry = {
   openApiVersion: string | null;
   openApiUrl: string | null;
   termsOfService: string | null;
+  openApiIcon: string | null;
   operationCount: number;
   parentProviderPath: string | null;
   parentPackageName: string | null;
@@ -247,6 +249,7 @@ async function buildRegistryEntry(
       manifest?.utdk?.openapi?.termsOfService ??
       openApiDocument?.info?.termsOfService ??
       null,
+    openApiIcon: manifest?.utdk?.openapi?.icon ?? null,
     operationCount: countOperations(openApiDocument),
     parentProviderPath,
     parentPackageName: null,

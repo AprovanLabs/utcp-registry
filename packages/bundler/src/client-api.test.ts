@@ -235,4 +235,49 @@ describe("buildClientToolMap", () => {
     expect(metadata?.inputType).toContain("body: string");
     expect(metadata?.runtimeMetadata.bodyKind).toBe("raw");
   });
+
+  it("promotes object bodies with additionalProperties to top-level input", () => {
+    const tool = createTool("spotify.createPlaylist", "POST", "https://api.spotify.com/users/{user_id}/playlists");
+    const openApiDocument = {
+      openapi: "3.0.0",
+      info: { title: "Spotify", version: "1.0.0" },
+      paths: {
+        "/users/{user_id}/playlists": {
+          post: {
+            parameters: [{ in: "path", name: "user_id", required: true, schema: { type: "string" } }],
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      name: { type: "string" },
+                      public: { type: "boolean" },
+                    },
+                    required: ["name"],
+                    additionalProperties: true,
+                  },
+                },
+              },
+            },
+            responses: {
+              "200": {
+                description: "ok",
+              },
+            },
+          },
+        },
+      },
+    } as OpenAPIV3.Document;
+
+    const metadata = buildClientToolMap(openApiDocument, [tool], { name: "spotify" }).get(tool.name);
+
+    expect(metadata?.inputType).toContain("name: string");
+    expect(metadata?.inputType).toContain("public?: boolean");
+    expect(metadata?.inputType).toContain("[key: string]: unknown");
+    expect(metadata?.inputType).not.toContain("body:");
+    expect(metadata?.runtimeMetadata.bodyKind).toBe("properties");
+    expect(metadata?.runtimeMetadata.bodyAllowsAdditionalProperties).toBe(true);
+  });
 });

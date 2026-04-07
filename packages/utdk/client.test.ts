@@ -87,6 +87,45 @@ describe("assembleRequest", () => {
       },
     });
   });
+
+  it("keeps unknown top-level keys in the body when promoted bodies allow additional properties", () => {
+    const request = assembleRequest(
+      {
+        accessPath: ["spotify", "createPlaylist"],
+        bodyAllowsAdditionalProperties: true,
+        bodyKind: "properties",
+        bodyPropertyKeys: ["name", "public"],
+        contentType: "application/json",
+        headerParameterKeys: [],
+        httpMethod: "POST",
+        pathTemplate: "/users/{user_id}/playlists",
+        pathConflictKeys: [],
+        pathParameterKeys: ["user_id"],
+        queryConflictKeys: [],
+        queryParameterKeys: ["market"],
+      },
+      {
+        user_id: "alice",
+        name: "Road Trip",
+        collaborative: true,
+        market: "US",
+      },
+    );
+
+    expect(request).toEqual({
+      body: {
+        collaborative: true,
+        name: "Road Trip",
+      },
+      headers: {},
+      pathParams: {
+        user_id: "alice",
+      },
+      queryParams: {
+        market: "US",
+      },
+    });
+  });
 });
 
 describe("createClient", () => {
